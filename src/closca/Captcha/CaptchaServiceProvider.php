@@ -18,11 +18,12 @@ class CaptchaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->package('mews/captcha');
+        $this->package('closca/captcha');
 
         require __DIR__ . '/../../routes.php';
-        $this->app->validator->resolver(function ($translator, $data, $rules, $messages) {
-            return new CaptchaValidator($translator, $data, $rules, $messages);
+        
+        $this->app['validator']->extend('captcha', function ($attribute, $value, $parameters) {
+            return \Captcha::check($value);
         });
     }
 
